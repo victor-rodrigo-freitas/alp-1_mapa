@@ -1,0 +1,116 @@
+Algoritmo "Mapa_ALP-1"
+//Victor Rodrigo Freitas
+TIPO
+   RegistroCaminhao = REGISTRO
+      capacidadeToneladas:inteiro
+      quilometrosPercorerra:inteiro
+      valorPorQuilometro:real
+      valorTransporte:real
+   FIMREGISTRO
+
+Var
+   i, j, toneladasProduzidas, quantidadeCaminhoes, capacidadeCaminhoes, caminhoesContratados:inteiro
+   valorTotal:real
+   caminhao:vetor[1..10] de RegistroCaminhao
+   aux:RegistroCaminhao
+
+Inicio
+
+   escreva("Digite a quantidade de toneladas produzidas: ")
+   leia(toneladasProduzidas)
+
+   escreva("Digite a quantidade de caminões: ")
+   leia(quantidadeCaminhoes)
+
+   //Leitura de dados dos caminhões
+   para i de 1 ate quantidadeCaminhoes faca
+      escreval()
+      escreval("Digite os Dados solicitados do ", i, "° caminhão")
+      escreva("Capacidade em toneladas do caminhão: ")
+      leia(caminhao[i].capacidadeToneladas)
+      capacidadeCaminhoes <- capacidadeCaminhoes + caminhao[i].capacidadeToneladas
+
+      escreva("Quilômetros que percorrerá: km")
+      leia(caminhao[i].quilometrosPercorerra)
+
+      escreva("Valor por tonelada em um quilômetro rodado: R$")
+      leia(caminhao[i].valorPorQuilometro)
+   fimpara
+   limpatela
+
+   //Verificar aptidão da empresa logistica
+   se(toneladasProduzidas <= capacidadeCaminhoes) entao
+      escreval("Empresa logistica apta a realizar o contrato!")
+
+      //Calculo custo de transporte de cada caminhao
+      para i de 1 ate quantidadeCaminhoes faca
+         se(caminhao[i].capacidadeToneladas > 45) entao
+            caminhao[i].valorTransporte <- (caminhao[i].capacidadeToneladas * caminhao[i].quilometrosPercorerra) * (caminhao[i].valorPorQuilometro * 0.75)
+         senao
+            caminhao[i].valorTransporte <- (caminhao[i].capacidadeToneladas * caminhao[i].quilometrosPercorerra) * caminhao[i].valorPorQuilometro
+         fimse
+      fimpara
+
+      //ordenacao dos caminhões por capacidade, maior ao menor
+      para i de 1 ate quantidadeCaminhoes faca
+         para j de 1 ate quantidadeCaminhoes - i faca
+            se(caminhao[j].capacidadeToneladas < caminhao[j+1].capacidadeToneladas) entao
+
+               aux.capacidadeToneladas <- caminhao[j].capacidadeToneladas
+               aux.quilometrosPercorerra <- caminhao[j].quilometrosPercorerra
+               aux.valorPorQuilometro <- caminhao[j].valorPorQuilometro
+               aux.valorTransporte <- caminhao[j].valorTransporte
+
+               caminhao[j].capacidadeToneladas <- caminhao[j+1].capacidadeToneladas
+               caminhao[j].quilometrosPercorerra <- caminhao[j+1].quilometrosPercorerra
+               caminhao[j].valorPorQuilometro <- caminhao[j+1].valorPorQuilometro
+               caminhao[j].valorTransporte <- caminhao[j+1].valorTransporte
+
+               caminhao[j+1].capacidadeToneladas <- aux.capacidadeToneladas
+               caminhao[j+1].quilometrosPercorerra <- aux.quilometrosPercorerra
+               caminhao[j+1].valorPorQuilometro <- aux.valorPorQuilometro
+               caminhao[j+1].valorTransporte <- aux.valorTransporte
+
+            fimse
+         fimpara
+      fimpara
+
+      caminhoesContratados <- 0
+      //Contratação da frota de caminhões
+      enquanto toneladasProduzidas > 0 faca
+         caminhoesContratados <- caminhoesContratados + 1
+         valorTotal <- valorTotal + caminhao[caminhoesContratados].valorTransporte
+         toneladasProduzidas <- toneladasProduzidas - caminhao[caminhoesContratados].capacidadeToneladas
+      fimenquanto
+      
+   senao
+      escreval("Empresa logistica nao esta apta a realizar o contrato!")
+   fimse
+
+   escreval()
+   escreval("-------------------------------------")
+   escreval("Caminhões disponiveis:")
+   para i de 1 ate quantidadeCaminhoes faca
+      escreval("Caminhao ", i)
+      escreval("Capacidade:", caminhao[i].capacidadeToneladas)
+      escreval("Quilometros que percorrera:", caminhao[i].quilometrosPercorerra)
+      escreval("Valor por km:", caminhao[i].valorPorQuilometro)
+      escreval("Valor Transporte:", caminhao[i].valorTransporte)
+      escreval()
+   fimpara
+
+   escreval("-------------------------------------")
+   escreval("Caminhões Contratados:")
+   para i de 1 ate caminhoesContratados faca
+      escreval("Caminhao ", i)
+      escreval("Capacidade:", caminhao[i].capacidadeToneladas)
+      escreval("Quilometros que percorrera:", caminhao[i].quilometrosPercorerra)
+      escreval("Valor por km:", caminhao[i].valorPorQuilometro)
+      escreval("Valor Transporte:", caminhao[i].valorTransporte)
+      escreval()
+   fimpara
+
+   escreval("Quantidade caminhões contratados:", caminhoesContratados)
+   escreval("Valor Total:", valorTotal)
+
+Fimalgoritmo
